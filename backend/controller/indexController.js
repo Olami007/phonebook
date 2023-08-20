@@ -1,5 +1,8 @@
+// Used controller (to handle the queries) to keep the routes clean
+
 const mysql = require("mysql");
 
+// Importing MySQL module for database connection and query execution.
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
