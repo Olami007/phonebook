@@ -43,7 +43,7 @@ const HomePage = () => {
 
       // updating the contact variable to remove the deleted contact
       setContacts((prevContacts) =>
-        prevContacts.filter((contact) => contact.id !== id)
+        prevContacts?.filter((contact) => contact.id !== id)
       );
     } catch (error) {
       console.log(error);
@@ -54,10 +54,12 @@ const HomePage = () => {
   };
 
   // a function to filter through the fetched contacts(converted to lowercase) and return contacts that has the input value
-  const filteredContacts = contacts.filter((contact) => {
-    const fullName = `${contact.firstName} ${contact.lastName}`.toLowerCase();
-    return fullName.includes(searchQuery.toLowerCase());
-  });
+  const filteredContacts =
+    contacts.length > 0 &&
+    contacts.filter((contact) => {
+      const fullName = `${contact.firstName} ${contact.lastName}`.toLowerCase();
+      return fullName.includes(searchQuery.toLowerCase());
+    });
 
   return (
     <>
@@ -79,32 +81,33 @@ const HomePage = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          {searchQuery && (
+          {searchQuery.length > 0 && (
             <div className="absolute mt-1 bg-celadon text-black border border-gray-300 rounded shadow">
-              {filteredContacts.map((contact, index) => (
-                <div
-                  key={contact.id}
-                  className="py-4 px-4 cursor-pointer hover:bg-gray-100"
-                >
-                  <span className="px-4">{`${index + 1}. `}</span>
-                  <span className="px-4">{contact.firstName}</span>
-                  <span className="px-4">{` ${contact.lastName}`}</span>
-                  <span className="px-4">{contact.phoneNumber}</span>
-                  <span className="px-4">{contact.email}</span>
-                  <Link
-                    className="px-4 text-blue-500 hover:underline"
-                    to={`edit/${contact.id}`}
+              {filteredContacts.length > 0 &&
+                filteredContacts.map((contact, index) => (
+                  <div
+                    key={contact.id}
+                    className="py-4 px-4 cursor-pointer hover:bg-gray-100"
                   >
-                    Edit
-                  </Link>
-                  <button
-                    className="px-4 text-red-500 hover:underline"
-                    onClick={() => handleDelete(contact.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))}
+                    <span className="px-4">{`${index + 1}. `}</span>
+                    <span className="px-4">{contact.firstName}</span>
+                    <span className="px-4">{` ${contact.lastName}`}</span>
+                    <span className="px-4">{contact.phoneNumber}</span>
+                    <span className="px-4">{contact.email}</span>
+                    <Link
+                      className="px-4 text-blue-500 hover:underline"
+                      to={`edit/${contact.id}`}
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="px-4 text-red-500 hover:underline"
+                      onClick={() => handleDelete(contact.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
             </div>
           )}
         </div>
@@ -121,29 +124,30 @@ const HomePage = () => {
             </tr>
           </thead>
           <tbody>
-            {contacts.map((contact, index) => (
-              <tr key={contact.id} className="border-b border-gray-300 py-4">
-                <td className="pr-4">{index + 1}</td>
-                <td className="px-4 py-4">{contact.firstName}</td>
-                <td className="px-4 py-4">{contact.lastName}</td>
-                <td className="px-4 py-4">{contact.phoneNumber}</td>
-                <td className="px-4 py-4">{contact.email}</td>
-                <td className="px-4 py-4">
-                  <Link
-                    className="text-green-700 hover:underline mx-4"
-                    to={`edit/${contact.id}`}
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="ml-2 text-red-500 hover:underline"
-                    onClick={() => handleDelete(contact.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {contacts.length > 0 &&
+              contacts.map((contact, index) => (
+                <tr key={contact.id} className="border-b border-gray-300 py-4">
+                  <td className="pr-4">{index + 1}</td>
+                  <td className="px-4 py-4">{contact.firstName}</td>
+                  <td className="px-4 py-4">{contact.lastName}</td>
+                  <td className="px-4 py-4">{contact.phoneNumber}</td>
+                  <td className="px-4 py-4">{contact.email}</td>
+                  <td className="px-4 py-4">
+                    <Link
+                      className="text-green-700 hover:underline mx-4"
+                      to={`edit/${contact.id}`}
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="ml-2 text-red-500 hover:underline"
+                      onClick={() => handleDelete(contact.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
